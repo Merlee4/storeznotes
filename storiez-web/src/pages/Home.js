@@ -27,7 +27,9 @@ class Home extends React.Component {
       posterror: "",
       isOpen: false,
     };
+
     this.handleClick.bind = this.handleClick.bind(this);
+    this.refresh = this.refresh.bind(this)
   }
 
   refresh() {
@@ -114,13 +116,13 @@ class Home extends React.Component {
                   <p>Logout</p>
                 </button>
               ) : (
-                <button
-                  className="bg-gray-500 rounded-md text-white px-3 py-1"
-                  onClick={() => this.props.history.push("/login")}
-                >
-                  Login
+                  <button
+                    className="bg-gray-500 rounded-md text-white px-3 py-1"
+                    onClick={() => this.props.history.push("/login")}
+                  >
+                    Login
                 </button>
-              )}
+                )}
             </div>
           </div>
         </div>
@@ -133,22 +135,23 @@ class Home extends React.Component {
               </h1>
             </div>
           ) : (
-            this.state.notes.map((task) => (
-              <Task
-                title={task.title}
-                body={task.body}
-                id={task._id}
-                image={task.image}
-                key={task._id}
-                date={
-                    task.dateAdded ? 
-                  moment(
-                    timeStampToDate(task.dateAdded, "yyyy-MM-dd HH:mm")
-                  ).fromNow() : ""
-                }
-              />
-            ))
-          )}
+              this.state.notes.map((task) => (
+                <Task
+                  title={task.title}
+                  body={task.body}
+                  id={task._id}
+                  image={task.image}
+                  key={task._id}
+                  refresh={this.refresh}
+                  date={
+                    task.dateAdded ?
+                      moment(
+                        timeStampToDate(task.dateAdded, "yyyy-MM-dd HH:mm")
+                      ).fromNow() : ""
+                  }
+                />
+              ))
+            )}
         </div>
         <Modal
           isOpen={this.state.modalOpen}

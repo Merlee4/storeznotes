@@ -1,26 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="Icon.png" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#FFFFFF" />
-    <meta
-      name="description"
-      content="A simple notes app by Mwelwa (github.com/Merlee4)"
-    />
 
-    <title>Storiez Notes</title>
-    <style>
-      *:focus,
-      *:active {
-        outline: none;
-      }
-    </style>
-  </head>
+<head>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="Icon.png" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="A simple notes app by Mwelwa (github.com/Merlee4)" />
 
-  <body>
-    <div id="root"></div>
-    <script src="../src/index.js"></script>
-  </body>
+  <title>Storiez Notes</title>
+  <style>
+    *:focus,
+    *:active {
+      outline: none;
+    }
+
+    button,
+    div,
+    image {
+      outline: none;
+      outline: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus,
+    div:focus,
+    image:focus {
+      outline: none;
+      outline: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:active {
+      transition: .2s;
+      background-color: rgb(19, 19, 19);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script src="../src/index.js"></script>
+</body>
+
 </html>

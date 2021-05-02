@@ -103,8 +103,8 @@ class Home extends React.Component {
         <div className="p-2 bg-black flex justify-between text-white font-mono">
           <p>{client.name}</p>
           <p>
-            {this.state.notes.length == 1 ? this.state.notes.length + ` Note` : null}
-            {this.state.notes.length == 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
+            {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
+            {this.state.notes.length === 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
         </div>
         <div className=" flex justify-between py-2 items-center p-4">
           <div>
@@ -148,7 +148,7 @@ class Home extends React.Component {
           <p className="font-semibold text-2xl">My Notes</p>
         </div>
         <div className="md:w-6/12 mx-auto">
-          {this.state.gettingNotes == true ? (
+          {this.state.gettingNotes === true ? (
             <div className="flex flex-col mt-10 text-gray-black opacity-40">
               <RefreshIcon className="h-20 " />
               <h1 className="text-center mt-4 text-lg">
@@ -156,7 +156,7 @@ class Home extends React.Component {
               </h1>
             </div>
           ) :
-            this.state.noNotesYet == true ?
+            this.state.noNotesYet === true ?
               <div className="flex flex-col mt-10 text-gray-black opacity-40">
                 <TrashIcon className="h-20 " />
                 <h1 className="text-center mt-4 text-lg">

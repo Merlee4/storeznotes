@@ -12,7 +12,7 @@ function Task({ title, body, image, id, date, refresh }) {
       .post("https://storiez-backend-server.herokuapp.com/delete", {
         id: id,
       })
-      .then((res) => {
+      .then(() => {
         refresh()
       });
   };
@@ -35,20 +35,20 @@ function Task({ title, body, image, id, date, refresh }) {
           style={{
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: increaseCardHeight == false ? 'nowrap' : null
+            whiteSpace: increaseCardHeight === false ? 'nowrap' : null
           }} >{body}</p>
 
         {image.length < 4 ? null : (
           <div>
-            <div className="flex items-center gap-2 text-gray-400" style={{ display: increaseCardHeight == true ? 'none' : 'flex' }}>
+            <div className="flex items-center gap-2 text-gray-400" style={{ display: increaseCardHeight === true ? 'none' : 'flex' }}>
               <PhotographIcon className="h-4" />
               <p>Image</p>
             </div>
             <img
               src={image}
               className="sm:mx-auto md:mx-0 sm:w-full md:w-9/12"
-              alt="Image Loading..."
-              style={{ display: increaseCardHeight == false ? 'none' : 'flex' }}
+              alt="Loading..."
+              style={{ display: increaseCardHeight === false ? 'none' : 'flex' }}
             />
           </div>
         )}
@@ -58,7 +58,7 @@ function Task({ title, body, image, id, date, refresh }) {
           className="px-1 active:text-red-200 duration-150 transition"
           onClick={() => setIsOpen(true)}
         ><TrashIcon className="h-5" /></button>
-        {increaseCardHeight == false ? <p className="text-gray-400 mx-4">Click to view more</p> : <p className="text-gray-400 mx-4">Click to hide</p>}
+        {increaseCardHeight === false ? <p className="text-gray-400 mx-4">Click to view more</p> : <p className="text-gray-400 mx-4">Click to hide</p>}
       </div>
       <DeleteModal isOpen={isOpen} setIsOpen={setIsOpen} yesDelete={yesDelete} />
     </div>

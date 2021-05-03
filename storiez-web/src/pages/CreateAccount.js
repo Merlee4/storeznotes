@@ -20,7 +20,7 @@ function CreateAccount() {
       alert("Your passwords do not match");
     } else {
       axios
-        .post("https://storiez-backend-server.herokuapp.com/signup", {
+        .post("http://localhost:9000/signup", {
           email: email,
           password: password,
           name: name,

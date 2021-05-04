@@ -41,21 +41,17 @@ class Shared extends React.Component {
     // GET NEW TASKS
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
-    axios
-      .post("https://storiez-backend-server.herokuapp.com/fetchshared", {
-        email: client.email2,
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          this.setState({
-            notes: res.data,
-            gettingNotes: false
-          });
-          if (res.data.length < 1) {
-            this.setState({ noNotesYet: true })
-          }
-        }
+    axios.post("https://storiez-backend-server.herokuapp.com/fetchshared", {
+      email: client.email2,
+    }).then((res) => {
+      this.setState({
+        notes: res.data,
+        gettingNotes: false
       });
+      if (res.data.length < 1) {
+        this.setState({ noNotesYet: true })
+      }
+    });
   }
 
   componentDidMount() {

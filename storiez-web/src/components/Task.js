@@ -8,6 +8,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
   const [increaseCardHeight, setIncreaseCardHeight] = useState(false);
   const [collapseableText, setCollapseableText] = useState(false)
   const [hideDeleteButton, setHideDeleteButton] = useState(false)
+
   useEffect(() => {
     if (body) {
       if (body.length > 40) {
@@ -19,7 +20,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
       setHideDeleteButton(true)
     }
   }, [body, email])
-  console.log()
+
   const yesDelete = () => {
     axios
       .post("https://storiez-backend-server.herokuapp.com/delete", {

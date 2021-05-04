@@ -14,7 +14,6 @@ function AddPartnerModal({ partnerOpen, yesPartner }) {
       email: client.email,
       email2: partnerEmail
     }).then(res => {
-      console.log(res)
       if (res.statusCode !== 200) {
         setError(res.data.msg)
       } else {

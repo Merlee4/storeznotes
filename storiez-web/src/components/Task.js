@@ -31,7 +31,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
   };
 
   return (
-    <div className="border-b flex flex-col border-gray-200 pb-4 my-2 text-gray-800 cursor-pointer transition duration-150" onClick={() => setIncreaseCardHeight(!increaseCardHeight)}>
+    <div className="border-b flex flex-col border-gray-200 pb-4 my-4 text-gray-800 cursor-pointer transition duration-150" onClick={() => setIncreaseCardHeight(!increaseCardHeight)}>
       {date !== null ? <div className="flex justify-end px-4 ">
         <p className="text-sm mb-4">{date}</p>
         <ClockIcon className="h-5 ml-2" />

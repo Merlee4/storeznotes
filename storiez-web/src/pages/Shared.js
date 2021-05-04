@@ -66,16 +66,31 @@ class Shared extends React.Component {
 
   render() {
     const client = JSON.parse(localStorage.getItem("client"));
+
     if (!localStorage.getItem("client")) {
       this.props.history.push("/");
+    }
+
+    const unPartner = () => {
+      axios.post('https://storiez-backend-server.herokuapp.com/unpartner', {
+        email: client.email,
+        email2: client.partner
+      }).then(res => {
+        const data = {
+          email: client.email,
+          name: client.name
+        }
+        localStorage.setItem('client', JSON.stringify(data))
+        this.props.history.push('/shared')
+        console.log(res)
+      })
     }
 
     return (
       <div >
         <div className="p-2 bg-black flex justify-between text-white font-mono">
           <p>{client.name}</p>
-          <p>
-            {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
+          <p>{this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
             {this.state.notes.length === 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
         </div>
         <div className=" flex justify-between py-2 items-center p-4">
@@ -85,7 +100,6 @@ class Shared extends React.Component {
           </div>
 
           <div className="flex">
-
             <div>
               {client.email ?
                 <button
@@ -106,13 +120,27 @@ class Shared extends React.Component {
             </div>
           </div>
         </div>
-        <div className="mx-4 flex items-baseline gap-4">
-          <p className="text-lg text-gray-500  cursor-pointer" onClick={() => this.props.history.push('/dash')}>My Notes</p>
-          <p className=" font-semibold text-2xl cursor-pointer" onClick={() => this.props.history.push('/shared')}>Shared Notes</p>
+        <div className="mx-4 flex flex-col ">
+          <div className="flex items-baseline gap-4">
+            <p className="text-lg text-gray-500  cursor-pointer" onClick={() => this.props.history.push('/dash')}>My Notes</p>
+            <p className=" font-semibold text-2xl cursor-pointer" onClick={() => this.props.history.push('/shared')}>Shared Notes</p>
+          </div>
+
+          <div>
+            {JSON.parse(localStorage.getItem('client')).partner ?
+              <div className="flex gap-2 items-center mt-4 py-2 border-b border-t">
+                <div className="flex gap-2  items-center flex-1">
+                  <p className="text-xl rounded-full py-1 px-2.5 bg-gray-200 text-gray-700">{client.partner ? client.partner.split('')[0].toUpperCase() : ''}</p>
+                  <p>{client.partner}</p>
+                </div>
+                <button onClick={() => unPartner()}><TrashIcon className="h-5 text-red-600" /></button>
+              </div> : null
+            }
+          </div>
         </div>
         <div className="md:w-6/12 mx-auto">
           {client.partner ?
-            <div>
+            <div className="md:w-6/12 mx-auto">
               {this.state.gettingNotes === true ? (
                 <div className="flex flex-col mt-10 text-gray-black opacity-40">
                   <RefreshIcon className="h-20 " />

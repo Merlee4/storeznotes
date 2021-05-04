@@ -41,8 +41,8 @@ class Shared extends React.Component {
     // GET NEW TASKS
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
-    axios.post("https://storiez-backend-server.herokuapp.com/fetchshared", {
-      email: client.email2,
+    axios.post("https://storiez-backend-server.herokuapp.com/", {
+      email: client.partner,
     }).then((res) => {
       console.log(res)
       this.setState({

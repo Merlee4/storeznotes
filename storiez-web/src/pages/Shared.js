@@ -6,7 +6,6 @@ import timeStampToDate from "timestamp-to-date";
 import moment from "moment";
 import {
   LogoutIcon,
-  PlusIcon,
   XIcon,
   RefreshIcon,
   TrashIcon,
@@ -43,7 +42,7 @@ class Shared extends React.Component {
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
     axios
-      .post("http://localhost:9000/fetchshared", {
+      .post("https://storiez-backend-server.herokuapp.com/fetchshared", {
         email: client.email2,
       })
       .then((res) => {
@@ -59,14 +58,13 @@ class Shared extends React.Component {
       });
   }
 
-
   componentDidMount() {
     this.refresh();
   }
 
   // Closes the partner model
-  yesPartner(){
-    this.setState({partnerOpen: false})
+  yesPartner() {
+    this.setState({ partnerOpen: false })
   }
 
   render() {
@@ -92,7 +90,7 @@ class Shared extends React.Component {
           <div className="flex">
 
             <div>
-              {client.email ? 
+              {client.email ?
                 <button
                   className="bg-red-300 rounded-md text-red-700 px-3 py-1 flex items-center gap-1"
                   onClick={() => {
@@ -103,11 +101,11 @@ class Shared extends React.Component {
                   <LogoutIcon className="h-5" />
                   <p>Logout</p>
                 </button>
-               : 
-                  <button
-                    className="bg-gray-500 rounded-md text-white px-3 py-1"
-                    onClick={() => this.props.history.push("/login")}>Login</button>
-                }
+                :
+                <button
+                  className="bg-gray-500 rounded-md text-white px-3 py-1"
+                  onClick={() => this.props.history.push("/login")}>Login</button>
+              }
             </div>
           </div>
         </div>
@@ -118,47 +116,47 @@ class Shared extends React.Component {
         <div className="md:w-6/12 mx-auto">
           {client.partner ?
             <div>
-            {this.state.gettingNotes === true ? (
-              <div className="flex flex-col mt-10 text-gray-black opacity-40">
-                <RefreshIcon className="h-20 " />
-                <h1 className="text-center mt-4 text-lg">
-                  Loading
-                </h1>
-              </div>
-            ) :
-              this.state.noNotesYet === true ?
+              {this.state.gettingNotes === true ? (
                 <div className="flex flex-col mt-10 text-gray-black opacity-40">
-                  <TrashIcon className="h-20 " />
+                  <RefreshIcon className="h-20 " />
                   <h1 className="text-center mt-4 text-lg">
-                    You Partner does not have any notes at the moment
+                    Loading
+                </h1>
+                </div>
+              ) :
+                this.state.noNotesYet === true ?
+                  <div className="flex flex-col mt-10 text-gray-black opacity-40">
+                    <TrashIcon className="h-20 " />
+                    <h1 className="text-center mt-4 text-lg">
+                      You Partner does not have any notes at the moment
               </h1>
-                </div> : this.state.notes.map((task) => (
-                  <Task
-                    title={task.title}
-                    body={task.body}
-                    id={task._id}
-                    image={task.image}
-                    key={task._id}
-                    email={task.email}
-                    refresh={this.refresh}
-                    date={
-                      task.dateAdded ?
-                        moment(
-                          timeStampToDate(task.dateAdded, "yyyy-MM-dd HH:mm")
-                        ).fromNow() : ""
-                    }
-                  />
-                ))
-            }
-          </div>
-          : 
-          <div className="mx-auto my-40 text-center">
-            <p className="text-sm">You have not yet added a partner</p>
-            <button className="px-2 py-1 mt-2 text-white bg-black rounded" onClick={() => this.setState({partnerOpen: true})}>Add Partner</button>
-          </div>}
+                  </div> : this.state.notes.map((task) => (
+                    <Task
+                      title={task.title}
+                      body={task.body}
+                      id={task._id}
+                      image={task.image}
+                      key={task._id}
+                      email={task.email}
+                      refresh={this.refresh}
+                      date={
+                        task.dateAdded ?
+                          moment(
+                            timeStampToDate(task.dateAdded, "yyyy-MM-dd HH:mm")
+                          ).fromNow() : null
+                      }
+                    />
+                  ))
+              }
+            </div>
+            :
+            <div className="mx-auto my-40 text-center">
+              <p className="text-sm">You have not yet added a partner</p>
+              <button className="px-2 py-1 mt-2 text-white bg-black rounded" onClick={() => this.setState({ partnerOpen: true })}>Add Partner</button>
+            </div>}
         </div>
         {/*Add Partner Modal*/}
-        <AddPartnerModal 
+        <AddPartnerModal
           partnerOpen={this.state.partnerOpen}
           yesPartner={this.yesPartner}
         />

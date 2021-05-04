@@ -9,20 +9,20 @@ function Task({ email, title, body, image, id, date, refresh }) {
   const [collapseableText, setCollapseableText] = useState(false)
   const [hideDeleteButton, setHideDeleteButton] = useState(false)
   useEffect(() => {
-    if (body != undefined) {
-      if(body.length > 40){
-        setCollapseableText(true)  
+    if (body !== undefined) {
+      if (body.length > 40) {
+        setCollapseableText(true)
       }
     }
     const client = JSON.parse(localStorage.getItem('client'))
-    if (email != client.email) {
+    if (email !== client.email) {
       setHideDeleteButton(true)
     }
-  }, [])
-console.log()
+  }, [body, email])
+  console.log()
   const yesDelete = () => {
     axios
-      .post("http://localhost:9000/delete", {
+      .post("https://storiez-backend-server.herokuapp.com/delete", {
         id: id,
       })
       .then(() => {
@@ -32,12 +32,12 @@ console.log()
 
   return (
     <div className="border-b flex flex-col border-gray-200 pb-4 my-2 text-gray-800 cursor-pointer transition duration-150" onClick={() => setIncreaseCardHeight(!increaseCardHeight)}>
-      <div className="flex justify-end px-4 ">
+      {date !== null ? <div className="flex justify-end px-4 ">
         <p className="text-sm mb-4">{date}</p>
         <ClockIcon className="h-5 ml-2" />
-      </div>
+      </div> : ''}
 
-         <div className="px-4">
+      <div className="px-4">
         {/* Title */}
         <div className="-mt-4 flex justify-between items-center">
           <h1 className=" text-lg font-medium">{title}</h1>
@@ -51,7 +51,7 @@ console.log()
             whiteSpace: increaseCardHeight === false ? 'nowrap' : ''
           }} >{body}</p>
         {/*Add imaeg beneath*/}
-        {image != undefined ? 
+        {image !== undefined ?
           <div>
             {image.length < 4 ? null : (
               <div>
@@ -66,14 +66,14 @@ console.log()
                   style={{ display: increaseCardHeight === false ? 'none' : 'flex' }}
                 />
               </div>
-            )}  
-        </div> : ''
+            )}
+          </div> : ''
         }
       </div>
-      
+
       <div className="text-red-800 mt-2 mx-2 flex justify-between">
         {/*Trash Icon*/}
-        {hideDeleteButton == false ?
+        {hideDeleteButton === false ?
           <button
             className="px-1 active:text-red-200 duration-150 transition"
             onClick={() => setIsOpen(true)}

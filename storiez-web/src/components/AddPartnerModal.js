@@ -6,22 +6,18 @@ import axios from 'axios'
 function AddPartnerModal({ partnerOpen, yesPartner }) {
   const [partnerEmail, setPartnerEmail] = useState('')
   const [msg, setMsg] = useState('')
-  const [error,setError ] = useState('')
-
-  const yesAdd = () => {
-    yesPartner();
-  };
+  const [error, setError] = useState('')
 
   const addPartner = () => {
     const client = JSON.parse(localStorage.getItem('client'))
-    axios.post('http://localhost:9000/addpartner', {
+    axios.post('https://storiez-backend-server.herokuapp.com/addpartner', {
       email: client.email,
       email2: partnerEmail
     }).then(res => {
       console.log(res)
-      if(res.statusCode != 200){
+      if (res.statusCode !== 200) {
         setError(res.data.msg)
-      }else{
+      } else {
         setMsg(res.data)
       }
     })
@@ -41,10 +37,10 @@ function AddPartnerModal({ partnerOpen, yesPartner }) {
           <div className="my-4 gap-5 text-center">
             {/*TExt Input*/}
             <input type="email" onChange={(e) => setPartnerEmail(e.target.value)} className="border-b border-gray-400 mb-4 w-full bg-gray-100 py-1.5 px-2" />
-            {msg ? <p className="mb-2 text-green-600"><strong>{msg}</strong> <br/>is now your friend</p> : null}
-            
+            {msg ? <p className="mb-2 text-green-600"><strong>{msg}</strong> <br />is now your friend</p> : null}
+
             <div className="flex">
-              <button onClick={() => yesAdd()} className="bg-black text-white rounded py-1 px-2" onClick={() => addPartner()}>Add Partner</button>
+              <button className="bg-black text-white rounded py-1 px-2" onClick={() => addPartner()}>Add Partner</button>
               <div className="py-1 px-5 flex items-center">
                 <button onClick={() => yesPartner()}>Discard</button>
               </div>

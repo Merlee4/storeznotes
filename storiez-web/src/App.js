@@ -14,7 +14,7 @@ function App() {
         <Route path="/dash" component={Home} />
         <Route path="/signup" component={CreateAccount} />
         <Route exact path="/" component={Login} />
-        <Route exact path="/shared" component={Shared}/>
+        <Route exact path="/shared" component={Shared} />
       </Switch>
     </BrowserRouter>
   );

@@ -44,6 +44,7 @@ class Shared extends React.Component {
     axios.post("https://storiez-backend-server.herokuapp.com/fetchshared", {
       email: client.email2,
     }).then((res) => {
+      console.log(res)
       this.setState({
         notes: res.data,
         gettingNotes: false

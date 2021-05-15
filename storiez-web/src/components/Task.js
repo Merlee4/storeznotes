@@ -23,7 +23,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
 
   const actionAllowed = () => {
     axios
-      .post("http://localhost:9000/delete", {
+      .post("https://storiez-backend-server.herokuapp.com/delete", {
         id: id,
       })
       .then(() => {

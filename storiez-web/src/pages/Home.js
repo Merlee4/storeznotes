@@ -40,7 +40,7 @@ class Home extends React.Component {
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
     axios
-      .post("http://localhost:9000/", {
+      .post("https://storiez-backend-server.herokuapp.com/", {
         email: client.email
       })
       .then((res) => {
@@ -65,7 +65,7 @@ class Home extends React.Component {
       this.setState({ noteText: "Create Note!" });
     } else {
       axios
-        .post("http://localhost:9000/post", {
+        .post("https://storiez-backend-server.herokuapp.com/post", {
           title: this.state.title.toLocaleUpperCase(),
           body: this.state.body,
           image: this.state.image,

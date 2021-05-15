@@ -19,7 +19,7 @@ class Login extends Component {
   handleLogin = (e) => {
     this.setState({ handleLogin: true, loading: true });
     e.preventDefault();
-    axios.post("http://localhost:9000/login", {
+    axios.post("https://storiez-backend-server.herokuapp.com//login", {
       email: this.state.email,
       password: this.state.password,
     }).then((res) => {

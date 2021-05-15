@@ -101,7 +101,7 @@ class Home extends React.Component {
       <div >
         <div className="p-2 bg-black flex justify-between text-white font-mono">
           <p>{client.name}</p>
-          {this.state.notes.length < 1 ?
+          {this.state.notes.length > 1 || this.state.notes.length == 1 ?
             <p>
               {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
               {this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}

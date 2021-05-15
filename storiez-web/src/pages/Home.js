@@ -162,7 +162,7 @@ class Home extends React.Component {
                 <h1 className="text-center mt-4 mx-20">
                   You do not have any notes at the moment
                 </h1>
-                <button className="bg-black rounded-sm text-white w-32 mt-4 mx-auto py-1">Add Note</button>
+                <button className="bg-black rounded-sm text-white w-32 mt-4 mx-auto py-1" onClick={() => this.setState({isOpen: true})}>Add Note</button>
               </div> : this.state.notes.map((task) => (
                 <Task
                   title={task.title}

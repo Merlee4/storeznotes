@@ -1,6 +1,5 @@
 import axios from "axios";
 import React from "react";
-
 import Modal from "react-modal";
 import timeStampToDate from "timestamp-to-date";
 import moment from "moment";
@@ -10,7 +9,9 @@ import {
   RefreshIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
+
 import Task from "../components/Task";
+import DeleteModal from '../components/PromptModal'
 import AddPartnerModal from '../components/AddPartnerModal'
 
 Modal.setAppElement("#root");
@@ -28,6 +29,7 @@ class Shared extends React.Component {
       email: "",
       posterror: "",
       isOpen: false,
+      promptModalOpen: false,
       gettingNotes: true,
       noNotesYet: false,
       partnerOpen: false
@@ -41,18 +43,22 @@ class Shared extends React.Component {
     // GET NEW TASKS
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
-    axios.post("https://storiez-backend-server.herokuapp.com/", {
-      email: client.partner,
-    }).then((res) => {
-      console.log(res)
-      this.setState({
-        notes: res.data,
-        gettingNotes: false
-      });
-      if (res.data.length < 1) {
-        this.setState({ noNotesYet: true })
+    if (client.partner) {
+      if (client.partner.length > 3) {
+        axios.post("http://localhost:9000/", {
+          email: client.partner,
+        }).then((res) => {
+          console.log(res)
+          this.setState({
+            notes: res.data,
+            gettingNotes: false
+          });
+          if (res.data.length < 1) {
+            this.setState({ noNotesYet: true })
+          }
+        });
       }
-    });
+    }
   }
 
   componentDidMount() {
@@ -64,6 +70,7 @@ class Shared extends React.Component {
     this.setState({ partnerOpen: false })
   }
 
+
   render() {
     const client = JSON.parse(localStorage.getItem("client"));
 
@@ -72,7 +79,7 @@ class Shared extends React.Component {
     }
 
     const unPartner = () => {
-      axios.post('https://storiez-backend-server.herokuapp.com/unpartner', {
+      axios.post('http://localhost:9000/unpartner', {
         email: client.email,
         email2: client.partner
       }).then(res => {
@@ -86,12 +93,18 @@ class Shared extends React.Component {
       })
     }
 
+    const modalOpenClosed = () => {
+      this.setState({ promptModalOpen: !this.state.promptModalOpen })
+    }
+
     return (
       <div >
         <div className="p-2 bg-black flex justify-between text-white font-mono">
           <p>{client.name}</p>
-          <p>{this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
-            {this.state.notes.length === 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
+          {client.partner ?
+            <p>{this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
+              {this.state.notes.length === 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
+            : ''}
         </div>
         <div className=" flex justify-between py-2 items-center p-4">
           <div>
@@ -130,10 +143,12 @@ class Shared extends React.Component {
             {JSON.parse(localStorage.getItem('client')).partner ?
               <div className="flex gap-2 items-center mt-4 py-2 border-b border-t">
                 <div className="flex gap-2  items-center flex-1">
-                  <p className="text-xl rounded-full py-1 px-2.5 bg-gray-200 text-gray-700">{client.partner ? client.partner.split('')[0].toUpperCase() : ''}</p>
+                  <p className="text-2xl rounded-full py-1 px-2.5 bg-gray-200 text-gray-700 font-bold">{client.partner ? client.partner.charAt(0).toUpperCase() : ''}</p>
                   <p>{client.partner}</p>
                 </div>
-                <button onClick={() => unPartner()}><TrashIcon className="h-5 text-red-600" /></button>
+                <button onClick={() => {
+                  this.setState({ promptModalOpen: true })
+                }}><TrashIcon className="h-5 text-red-600" /></button>
               </div> : null
             }
           </div>
@@ -242,6 +257,8 @@ class Shared extends React.Component {
               </button>
           </form>
         </Modal>
+        {/* Comfirm Action Delete User */}
+        <DeleteModal isOpen={this.state.promptModalOpen} setIsOpen={modalOpenClosed} actionAllowed={unPartner} />
       </div>
     );
   }

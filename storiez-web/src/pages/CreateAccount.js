@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { RefreshIcon } from "@heroicons/react/outline";
 
 function CreateAccount() {
   const [email, setEmail] = useState("");
@@ -20,7 +21,7 @@ function CreateAccount() {
       alert("Your passwords do not match");
     } else {
       axios
-        .post("https://storiez-backend-server.herokuapp.com/signup", {
+        .post("http://localhost:9000/signup", {
           email: email,
           password: password,
           name: name,
@@ -77,7 +78,7 @@ function CreateAccount() {
             className="bg-black p-2 rounded text-white mt-2"
             type="submit"
           >
-            {loading ? "Loading..." : "Create Account"}
+            {loading ? <RefreshIcon className="h-6 mx-auto " /> : "Create Account"}
           </button>
           <small className="text-center text-red-700 mt-4">{msg}</small>
           <Link to="/" className="text-center underline">

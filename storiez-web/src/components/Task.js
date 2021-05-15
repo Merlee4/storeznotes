@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DeleteModal from './DeleteModal'
+import DeleteModal from './PromptModal'
 import { ClockIcon, TrashIcon, PhotographIcon, ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/outline";
 
 function Task({ email, title, body, image, id, date, refresh }) {
@@ -21,9 +21,9 @@ function Task({ email, title, body, image, id, date, refresh }) {
     }
   }, [body, email])
 
-  const yesDelete = () => {
+  const actionAllowed = () => {
     axios
-      .post("https://storiez-backend-server.herokuapp.com/delete", {
+      .post("http://localhost:9000/delete", {
         id: id,
       })
       .then(() => {
@@ -95,7 +95,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
           </div> : null}
 
       </div>
-      <DeleteModal isOpen={isOpen} setIsOpen={setIsOpen} yesDelete={yesDelete} />
+      <DeleteModal isOpen={isOpen} setIsOpen={setIsOpen} actionAllowed={actionAllowed} />
     </div>
   );
 }

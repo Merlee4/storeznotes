@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import logo from '../components/images/Icon.png';
+import { RefreshIcon } from "@heroicons/react/outline";
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class Login extends Component {
   handleLogin = (e) => {
     this.setState({ handleLogin: true, loading: true });
     e.preventDefault();
-    axios.post("https://storiez-backend-server.herokuapp.com/login", {
+    axios.post("http://localhost:9000/login", {
       email: this.state.email,
       password: this.state.password,
     }).then((res) => {
@@ -85,7 +86,7 @@ class Login extends Component {
               className="bg-black p-2 rounded text-white mt-2"
               type="submit"
             >
-              {this.state.loading === true ? "Loading..." : "Sign in"}
+              {this.state.loading === true ? <RefreshIcon className="h-6 mx-auto " /> : "Sign in"}
             </button>
             {/* Create an account link */}
             <small className="text-center text-red-700 mt-4">

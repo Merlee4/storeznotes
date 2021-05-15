@@ -1,6 +1,5 @@
 import axios from "axios";
 import React from "react";
-import Task from "../components/Task";
 import Modal from "react-modal";
 import timeStampToDate from "timestamp-to-date";
 import moment from "moment";
@@ -9,14 +8,15 @@ import {
   PlusIcon,
   XIcon,
   RefreshIcon,
-  TrashIcon,
 } from "@heroicons/react/outline";
+import loadingIcon from '../components/images/loading.gif'
+import Task from "../components/Task";
 
 Modal.setAppElement("#root");
 
 class Home extends React.Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       notes: [],
       noteText: "Create Note!",
@@ -40,7 +40,7 @@ class Home extends React.Component {
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
     axios
-      .post("https://storiez-backend-server.herokuapp.com/", {
+      .post("http://localhost:9000/", {
         email: client.email
       })
       .then((res) => {
@@ -65,7 +65,7 @@ class Home extends React.Component {
       this.setState({ noteText: "Create Note!" });
     } else {
       axios
-        .post("https://storiez-backend-server.herokuapp.com/post", {
+        .post("http://localhost:9000/post", {
           title: this.state.title.toLocaleUpperCase(),
           body: this.state.body,
           image: this.state.image,
@@ -101,9 +101,12 @@ class Home extends React.Component {
       <div >
         <div className="p-2 bg-black flex justify-between text-white font-mono">
           <p>{client.name}</p>
-          <p>
-            {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
-            {this.state.notes.length === 0 || this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}  </p>
+          {this.state.notes.length < 1 ?
+            <p>
+              {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
+              {this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}
+            </p>
+            : null}
         </div>
         <div className=" flex justify-between py-2 items-center p-4">
           <div>
@@ -113,13 +116,13 @@ class Home extends React.Component {
 
           <div className="flex">
             {/* Add Icon */}
-            <button
+            {this.state.notes.length > 0 ? <button
               className="bg-black rounded-md text-white px-3 py-1 mr-2 items-center flex gap-2"
               onClick={() => this.setState({ modalOpen: true })}
             >
               <PlusIcon className="h-5" />
               <p className="md:flex hidden">Add Note!</p>
-            </button>
+            </button> : null}
             <div>
               {client.email ? (
                 <button
@@ -150,18 +153,16 @@ class Home extends React.Component {
         <div className="md:w-6/12 mx-auto">
           {this.state.gettingNotes === true ? (
             <div className="flex flex-col mt-10 text-gray-black opacity-40">
-              <RefreshIcon className="h-20 " />
-              <h1 className="text-center mt-4 text-lg">
-                Loading
-              </h1>
+              <img src={loadingIcon} className="h-36 w-36 mx-auto" alt="loading" />
             </div>
           ) :
             this.state.noNotesYet === true ?
-              <div className="flex flex-col mt-10 text-gray-black opacity-40">
-                <TrashIcon className="h-20 " />
-                <h1 className="text-center mt-4 text-lg">
-                  You Currently do not have any notes at the moment
-            </h1>
+              <div className="flex flex-col mt-10 text-gray-black opacity-36">
+                {/* <TrashIcon className="h-20 text-gray-600 " /> */}
+                <h1 className="text-center mt-4 mx-20">
+                  You do not have any notes at the moment
+                </h1>
+                <button className="bg-black rounded-sm text-white w-32 mt-4 mx-auto py-1">Add Note</button>
               </div> : this.state.notes.map((task) => (
                 <Task
                   title={task.title}
@@ -229,7 +230,7 @@ class Home extends React.Component {
             <button
               className="bg-black rounded p-2 mt-2 text-white mb-4"
               type="submit"
-              onClick={() => this.setState({ noteText: "Loading..." })}
+              onClick={() => this.setState({ noteText: <RefreshIcon className="h-6 mx-auto " /> })}
             >
               {this.state.noteText}
             </button>

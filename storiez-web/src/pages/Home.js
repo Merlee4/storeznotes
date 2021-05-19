@@ -97,6 +97,21 @@ class Home extends React.Component {
       this.props.history.push("/");
     }
 
+    axios
+      .post("https://storiez-backend-server.herokuapp.com/", {
+        email: client.email
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            notes: res.data,
+            gettingNotes: false
+          });
+          if (res.data.length < 1) {
+            this.setState({ noNotesYet: true })
+          }
+        }
+      });
     return (
       <div >
         <div className="p-2 bg-black flex justify-between text-white font-mono">

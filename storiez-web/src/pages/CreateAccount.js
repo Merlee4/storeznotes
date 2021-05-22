@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { RefreshIcon } from "@heroicons/react/outline";
 
 function CreateAccount() {
@@ -10,7 +10,6 @@ function CreateAccount() {
   const [name, setName] = useState("");
 
   const [msg, setMsg] = useState("");
-  const router = useHistory();
   const [loading, setLoading] = useState(false);
 
   const handleLogin = (e) => {
@@ -27,19 +26,24 @@ function CreateAccount() {
           name: name,
         })
         .then((res) => {
+          console.log(res.data)
           if (res.data.error) {
             setMsg(res.data.error);
             setLoading(false);
           } else {
-            router.push("/");
+            window.location = "/";
           }
         });
     }
   };
 
+  const client = localStorage.getItem("client")
+  if (client) {
+    window.location = '/'
+  }
   return (
     <div className="w-screen h-screen flex">
-      <div className="my-auto mx-auto w-96 border rounded-lg p-4">
+      <div className="my-auto mx-auto w-96 md:border rounded-lg p-4">
         <h1 className="text-3xl font-semibold">Create </h1>
         <p className="text-sm mt-2">
           By signing up you agree to the terms and conditions that will never
@@ -76,8 +80,7 @@ function CreateAccount() {
           />
           <button
             className="bg-black p-2 rounded text-white mt-2"
-            type="submit"
-          >
+            type="submit">
             {loading ? <RefreshIcon className="h-6 mx-auto " /> : "Create Account"}
           </button>
           <small className="text-center text-red-700 mt-4">{msg}</small>

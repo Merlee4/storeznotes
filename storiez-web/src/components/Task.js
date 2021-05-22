@@ -8,18 +8,28 @@ function Task({ email, title, body, image, id, date, refresh }) {
   const [increaseCardHeight, setIncreaseCardHeight] = useState(false);
   const [collapseableText, setCollapseableText] = useState(false)
   const [hideDeleteButton, setHideDeleteButton] = useState(false)
-
+  // const [agotime, setAgoTime] = useState('')
   useEffect(() => {
     if (body) {
       if (body.length > 40) {
         setCollapseableText(true)
       }
     }
+    // switch (date.split(' ')[1]) {
+    //   case 'seconds':
+    //     setAgoTime('secs')
+    //   case 'minutes':
+    //     setAgoTime('mins')
+    //   case 'hours':
+    //     setAgoTime('hrs')
+    //   default:
+    //     setAgoTime(date.split(' ')[1])
+    // }
     const client = JSON.parse(localStorage.getItem('client'))
     if (email !== client.email) {
       setHideDeleteButton(true)
     }
-  }, [body, email])
+  }, [body, email, date])
 
   const actionAllowed = () => {
     axios
@@ -34,6 +44,7 @@ function Task({ email, title, body, image, id, date, refresh }) {
   return (
     <div className="border-b flex flex-col border-gray-200 p-4 my-2 text-gray-800 cursor-pointer transition duration-150" onClick={() => setIncreaseCardHeight(!increaseCardHeight)}>
       {date !== null ? <div className="flex justify-end px-4 ">
+        {/* <p className="text-sm mb-4">{date.split(' ')[0]} {agotime} {date.split(' ')[2]}</p> */}
         <p className="text-sm mb-4">{date}</p>
         <ClockIcon className="h-5 ml-2" />
       </div> : ''}

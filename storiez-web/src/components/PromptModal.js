@@ -13,14 +13,14 @@ function PrompModal({ isOpen, setIsOpen, actionAllowed }) {
         <InformationCircleIcon className="h-10 mb-2 text-gray-700 text-center" />
         <div className="flex flex-col items-center">
           <p className=" w-48 text-center">
-            Be careful this action cannot be undone
+            Are you sure you want to perform this action?
           </p>
           <div className="my-4 flex gap-5">
             <div className="py-1 px-5 bg-gray-200 rounded font-medium flex justify-center">
-              <button onClick={() => performAction()}>Continue</button>
+              <button onClick={() => performAction()}>Yes</button>
             </div>
             <div className="py-1 px-5 flex items-center">
-              <button onClick={() => setIsOpen()}>Discard</button>
+              <button onClick={() => setIsOpen()}>No</button>
             </div>
           </div>
         </div>

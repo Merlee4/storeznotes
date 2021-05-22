@@ -14,7 +14,7 @@ function AddPartnerModal({ partnerOpen, yesPartner }) {
       setMsg('')
       setLoading(true)
       const client = JSON.parse(localStorage.getItem('client'))
-      axios.post('https://storiez-backend-server.herokuapp.com/addpartner', {
+      axios.post('https://storiez-backend-server.herokuapp.com//addpartner', {
         email: client.email,
         email2: partnerEmail
       }).then(res => {

@@ -21,7 +21,7 @@ class Main extends Component {
     this.setState({ handleLogin: true, loading: true });
     e.preventDefault();
     axios
-      .post("https://storiez-backend-server.herokuapp.comlogin", {
+      .post("https://storiez-backend-server.herokuapp.com/login", {
         email: this.state.email,
         password: this.state.password,
       })

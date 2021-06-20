@@ -49,7 +49,7 @@ class Shared extends React.Component {
     if (client.partner) {
       if (client.partner.length > 3) {
         axios
-          .post("http://localhost:9000/", {
+          .post("https://storiez-backend-server.herokuapp.com", {
             email: client.partner,
           })
           .then((res) => {
@@ -84,7 +84,7 @@ class Shared extends React.Component {
 
     const unPartner = () => {
       axios
-        .post("http://localhost:9000//unpartner", {
+        .post("https://storiez-backend-server.herokuapp.com/unpartner", {
           email: client.email,
           email2: client.partner,
         })

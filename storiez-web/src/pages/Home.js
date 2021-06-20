@@ -49,7 +49,7 @@ class Home extends React.Component {
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
     axios
-      .post("http://localhost:9000/", {
+      .post("https://storiez-backend-server.herokuapp.com", {
         email: client.email,
       })
       .then((res) => {
@@ -90,7 +90,7 @@ class Home extends React.Component {
       // this.setState({localnotes:})
 
       axios
-        .post("http://localhost:9000/post", {
+        .post("https://storiez-backend-server.herokuapp.com/post", {
           title: this.state.title.toLocaleUpperCase(),
           body: this.state.body,
           image: this.state.image,
@@ -124,7 +124,7 @@ class Home extends React.Component {
     }
 
     axios
-      .post("http://localhost:9000/", {
+      .post("https://storiez-backend-server.herokuapp.com", {
         email: client.email,
       })
       .then((res) => {
@@ -146,7 +146,7 @@ class Home extends React.Component {
         localStorage.setItem("client", newClient);
         this.setState({ UserModalOpen: false });
         axios
-          .post("http://localhost:9000/editprofile", {
+          .post("https://storiez-backend-server.herokuapp.com/editprofile", {
             user: newClient,
             email: client.email,
           })

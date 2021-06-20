@@ -21,14 +21,14 @@ function CreateAccount() {
       alert("Your passwords do not match");
     } else {
       axios
-        .post("http://localhost:9000/signup", {
+        .post("https://storiez-backend-server.herokuapp.com/signup", {
           email: email,
           password: password,
           name: name,
-          profile: profile
+          profile: profile,
         })
         .then((res) => {
-          console.log(res.data)
+          console.log(res.data);
           if (res.data.error) {
             setMsg(res.data.error);
             setLoading(false);
@@ -39,9 +39,9 @@ function CreateAccount() {
     }
   };
 
-  const client = localStorage.getItem("client")
+  const client = localStorage.getItem("client");
   if (client) {
-    window.location = '/'
+    window.location = "/";
   }
   return (
     <div className="w-screen h-screen flex">
@@ -89,8 +89,13 @@ function CreateAccount() {
           />
           <button
             className="bg-black p-2 rounded text-white mt-2"
-            type="submit">
-            {loading ? <RefreshIcon className="h-6 mx-auto " /> : "Create Account"}
+            type="submit"
+          >
+            {loading ? (
+              <RefreshIcon className="h-6 mx-auto " />
+            ) : (
+              "Create Account"
+            )}
           </button>
           <small className="text-center text-red-700 mt-4">{msg}</small>
           <Link to="/" className="text-center underline">

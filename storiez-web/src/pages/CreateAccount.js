@@ -8,6 +8,7 @@ function CreateAccount() {
   const [password, setPassword] = useState("");
   const [confirm, setComfirm] = useState("");
   const [name, setName] = useState("");
+  const [profile, setProfile] = useState("");
 
   const [msg, setMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,10 +21,11 @@ function CreateAccount() {
       alert("Your passwords do not match");
     } else {
       axios
-        .post("https://storiez-backend-server.herokuapp.com/signup", {
+        .post("http://localhost:9000/signup", {
           email: email,
           password: password,
           name: name,
+          profile: profile
         })
         .then((res) => {
           console.log(res.data)
@@ -77,6 +79,13 @@ function CreateAccount() {
             className="border rounded mt-2 p-2"
             placeholder="Full Name"
             onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            required
+            type="text"
+            className="border rounded mt-2 p-2"
+            placeholder="User Image Url"
+            onChange={(e) => setProfile(e.target.value)}
           />
           <button
             className="bg-black p-2 rounded text-white mt-2"

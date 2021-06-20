@@ -21,7 +21,7 @@ class Main extends Component {
     handleLogin = (e) => {
         this.setState({ handleLogin: true, loading: true });
         e.preventDefault();
-        axios.post("https://storiez-backend-server.herokuapp.com/login", {
+        axios.post("http://localhost:9000/login", {
             email: this.state.email,
             password: this.state.password,
         }).then((res) => {
@@ -37,14 +37,7 @@ class Main extends Component {
                 window.location = "/";
                 this.setState({ loading: false });
             }
-        }).catch(() => {
-            if (
-                JSON.parse(localStorage.getItem("client")).email ===
-                this.state.email
-            ) {
-                window.location = "/";
-            }
-        });
+        })
     };
 
     render() {

@@ -1,17 +1,14 @@
-
-import React, { Component } from "react";
+import React from "react";
 import Login from "./Login";
-import Home from './Home'
+import Home from "./Home";
 
 function Main() {
-
-  const client = localStorage.getItem("client")
+  const client = localStorage.getItem("client");
   return (
     <>
       {/* Render Home when login */}
-      {client ? <Home /> :
-        <Login />
-      }
+      {client && <Home />}
+      {!client && <Login />}
     </>
   );
 }

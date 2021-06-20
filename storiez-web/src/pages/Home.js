@@ -8,6 +8,8 @@ import {
   PlusIcon,
   XIcon,
   RefreshIcon,
+  SearchIcon,
+  UserIcon,
 } from "@heroicons/react/outline";
 import loadingIcon from '../components/images/loading.gif'
 import Task from "../components/Task";
@@ -21,16 +23,21 @@ class Home extends React.Component {
     super(props);
     this.state = {
       notes: [],
+      localnotes: [],
       noteText: "Create Note!",
-      modalOpen: false,
       title: "",
       body: "",
       image: "",
       email: "",
+      userName: "",
+      userProfile: "",
+      profileError: "",
       posterror: "",
       isOpen: false,
+      modalOpen: false,
+      noNotesYet: false,
+      UserModalOpen: false,
       gettingNotes: true,
-      noNotesYet: false
     };
 
     this.handleClick.bind = this.handleClick.bind(this);
@@ -42,13 +49,14 @@ class Home extends React.Component {
     const client = JSON.parse(localStorage.getItem("client"));
     this.setState({ email: client.email });
     axios
-      .post("https://storiez-backend-server.herokuapp.com/", {
+      .post("http://localhost:9000/", {
         email: client.email
       })
       .then((res) => {
         if (res.status === 200) {
           this.setState({
             notes: res.data,
+            localnotes: res.data,
             gettingNotes: false
           });
           if (res.data.length < 1) {
@@ -66,8 +74,18 @@ class Home extends React.Component {
       this.setState({ posterror: "You need to include a title" });
       this.setState({ noteText: "Create Note!" });
     } else {
+      const previousNotes = this.state.localnotes
+      this.setState({ localnotes: [previousNotes,{
+        title: this.state.title.toLocaleUpperCase(),
+        body: this.state.body,
+        image: this.state.image,
+        email: client.email,
+        dateAdded: Date.now(),
+      }]})
+      // this.setState({localnotes:})
+
       axios
-        .post("https://storiez-backend-server.herokuapp.com/post", {
+        .post("http://localhost:9000/post", {
           title: this.state.title.toLocaleUpperCase(),
           body: this.state.body,
           image: this.state.image,
@@ -100,11 +118,66 @@ class Home extends React.Component {
       window.location = "/";
     }
 
+    axios
+      .post("http://localhost:9000/", {
+        email: client.email
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          this.setState({
+            notes: res.data,
+            gettingNotes: false
+          });
+          if (res.data.length < 1) {
+            this.setState({ noNotesYet: true })
+          }
+        }
+      });
+
+    const editUser = () => {
+
+      const client = JSON.parse(localStorage.getItem("client"))
+
+      const apiCall = (newClient) => {
+        localStorage.setItem("client", newClient)
+        this.setState({ UserModalOpen: false })
+        axios.post('http://localhost:9000/editprofile', {
+          user: newClient,
+          email: client.email
+        }).then((res) => console.log(res))
+      }
+
+      if (this.state.userName.length > 1 && this.state.userProfile.length < 1) {
+
+        const newClient = { name: this.state.userName, email: client.email, profile: client.profile, partner: client.partner }
+        apiCall(newClient)
+      }
+      if (this.state.userName.length < 1 && this.state.userProfile.length > 1) {
+        const newClient = { name: client.name, email: client.email, profile: this.state.userProfile, partner: client.partner }
+        apiCall(newClient)
+      }
+      if (this.state.userName.length > 1 && this.state.userProfile.length > 1) {
+        const newClient = { name: this.state.userName, email: client.email, profile: this.state.userProfile, partner: client.partner }
+        apiCall(newClient)
+      } else if (this.state.userName.length < 1 && this.state.userProfile.length < 1) {
+        this.setState({ profileError: 'You have not made any changes' })
+      }
+    }
     return (
-      <div className="lg:grid grid-cols-5">
-        <div className="col-span-1 lg:grid hidden">
+      // SideBar
+      <div className="lg:grid grid-cols-7 h-screen ">
+        <div className="col-span-2 lg:grid hidden  shadow ">
           <div className="p-5 mt-6  h-full ">
             <img src={logo} alt="logo" className="h-10" />
+            {/* Search */}
+            <div className="mt-10">
+              <div className="flex items-center group p-1 shadow mr-2 w-full">
+                <input placeholder="search notes" className="py-2 px-4 flex-1 " style={{ borderWidth: '0px', borderColor: 'transparent', borderStyle: 'none' }} />
+                <button>
+                  <SearchIcon className="h-6 text-gray-500 px-2 " />
+                </button>
+              </div>
+            </div>
             <div className="mt-4 flex flex-col">
               <Link className="flex  mb-4 p-2 bg-gray-100 rounded  "
                 to="/">
@@ -117,16 +190,33 @@ class Home extends React.Component {
             </div>
           </div>
         </div>
-        <div className="col-span-4">
-          <div className="p-2 bg-black flex justify-between text-white font-mono">
-            <p>{client.name}</p>
-            {this.state.notes.length < 1 ?
-              <p>
-                {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
-                {this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}
-              </p>
-              : null}
+        {/* Main Page */}
+        <div className="col-span-5 shadow">
+          <div className="p-4 flex shadow w-full">
+
+            {/* User */}
+            <div className=" flex-1  ">
+              <div className="cursor-pointer flex justify-between text-white font-mono items-center">
+                <p className="text-black font-bold">
+                  {this.state.notes.length === 1 ? this.state.notes.length + ` Note` : null}
+                  {this.state.notes.length > 1 ? this.state.notes.length + ` Notes` : null}
+                </p>
+
+                <div className="flex items-center">
+                  <div className="p-2 rounded-full bg-black mr-2 p-1 hover:bg-gray-50" onClick={() => this.setState({ UserModalOpen: true })}>
+                    {client.profile ?
+                      <img src={client.profile} alt="profile" />
+                      : <UserIcon className="h-6 text-white" />}
+                  </div>
+                  <p className="font-bold text-gray-600">{client.name}</p>
+                </div>
+                {/* Number of notes */}
+              </div>
+
+
+            </div>
           </div>
+
           <div className=" flex justify-between py-2 items-center p-4">
             <div>
               <p className="text-xl font-medium">{moment().format('dddd, D')}</p>
@@ -182,7 +272,7 @@ class Home extends React.Component {
                     You do not have any notes at the moment
                 </h1>
                   <button className="bg-black rounded-sm text-white w-32 mt-4 mx-auto py-1" onClick={() => this.setState({ modalOpen: true })}>Add Note</button>
-                </div> : this.state.notes.map((task) => (
+                </div> : this.state.previousNotes.map((task) => (
                   <Task
                     title={task.title}
                     body={task.body}
@@ -261,8 +351,47 @@ class Home extends React.Component {
               </div>
             </form>
           </Modal>
+
+          {/* User Profile Modal */}
+          <Modal isOpen={this.state.UserModalOpen} onRequestClose={() => this.setState({ UserModalOpen: false })} className="w-screen">
+            <div className="bg-white border h-screen md:6/12  lg:w-4/12 mx-auto p-4">
+              <div className="mx-auto">
+                <div className="flex items-center">
+                  <p className="font-bold text-2xl flex-1">Profile</p>
+                  <XIcon className="h-6 cursor-pointer" onClick={() => this.setState({ UserModalOpen: false })} />
+                </div>
+                {/* Error Message no changes */}
+                <p className="text-red-600">{this.state.profileError}</p>
+                <p className="mt-2 ">Profile Picture</p>
+                <div className="">
+                  <div className="mt-4">
+                    {client.profile ?
+                      <img src={client.profile} alt="profile " className="profile rounded-xl bg-black" />
+                      : <UserIcon className="h-28 text-white p-4 rounded-xl bg-black" />}
+                    <div className="text-xl mt-4 flex flex-col">
+                      <p className="text-sm">Full Name</p>
+                      <input placeholder={client.name} className=" mt-4 border rounded px-2 py-2" onChange={(e) => {
+                        this.setState({ userName: e.target.value })
+                        this.setState({ profileError: "" })
+                      }} />
+                      <p className="text-sm mt-4">Profile Image</p>
+                      <input className="text-xl mt-1 border rounded px-2 py-2" onChange={(e) => {
+                        this.setState({ userProfile: e.target.value })
+                        this.setState({ profileError: "" })
+                      }} />
+                      <div className="flex flex-col lg:flex-row lg:items-center mt-4 ">
+                        <button className="flex-1 px-2 py-1 bg-black rounded text-white mb-2" onClick={() => editUser()}>Done</button>
+                        <button className="px-2 py-1 rounded text-black lg:px-10" onClick={() => this.setState({ UserModalOpen: false })}>Discard</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal>
         </div>
-      </div>
+      </div >
     );
   }
 }

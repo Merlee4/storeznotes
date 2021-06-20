@@ -1,53 +1,57 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DeleteModal from './PromptModal'
-import { ClockIcon, TrashIcon, PhotographIcon, ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/outline";
+import DeleteModal from "./PromptModal";
+import {
+  ClockIcon,
+  TrashIcon,
+  PhotographIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
+} from "@heroicons/react/outline";
 
 function Task({ email, title, body, image, id, date, refresh }) {
   const [isOpen, setIsOpen] = useState(false);
   const [increaseCardHeight, setIncreaseCardHeight] = useState(false);
-  const [collapseableText, setCollapseableText] = useState(false)
-  const [hideDeleteButton, setHideDeleteButton] = useState(false)
+  const [collapseableText, setCollapseableText] = useState(false);
+  const [hideDeleteButton, setHideDeleteButton] = useState(false);
   // const [agotime, setAgoTime] = useState('')
   useEffect(() => {
     if (body) {
       if (body.length > 40) {
-        setCollapseableText(true)
+        setCollapseableText(true);
       }
     }
-    // switch (date.split(' ')[1]) {
-    //   case 'seconds':
-    //     setAgoTime('secs')
-    //   case 'minutes':
-    //     setAgoTime('mins')
-    //   case 'hours':
-    //     setAgoTime('hrs')
-    //   default:
-    //     setAgoTime(date.split(' ')[1])
-    // }
-    const client = JSON.parse(localStorage.getItem('client'))
+
+    const client = JSON.parse(localStorage.getItem("client"));
     if (email !== client.email) {
-      setHideDeleteButton(true)
+      setHideDeleteButton(true);
     }
-  }, [body, email, date])
+  }, [body, email, date]);
 
   const actionAllowed = () => {
     axios
-      .post("https://storiez-backend-server.herokuapp.com/delete", {
+      .post("http://localhost:9000/delete", {
         id: id,
       })
       .then(() => {
-        refresh()
+        refresh();
       });
   };
 
   return (
-    <div className="border-b flex flex-col border-gray-200 p-4 my-2 text-gray-800 cursor-pointer transition duration-150" onClick={() => setIncreaseCardHeight(!increaseCardHeight)}>
-      {date !== null ? <div className="flex justify-end px-4 ">
-        {/* <p className="text-sm mb-4">{date.split(' ')[0]} {agotime} {date.split(' ')[2]}</p> */}
-        <p className="text-sm mb-4">{date}</p>
-        <ClockIcon className="h-5 ml-2" />
-      </div> : ''}
+    <div
+      className="border-b flex flex-col border-gray-200 p-4 my-2 text-gray-800 cursor-pointer transition duration-150"
+      onClick={() => setIncreaseCardHeight(!increaseCardHeight)}
+    >
+      {date !== null ? (
+        <div className="flex justify-end px-4 ">
+          {/* <p className="text-sm mb-4">{date.split(' ')[0]} {agotime} {date.split(' ')[2]}</p> */}
+          <p className="text-sm mb-4">{date}</p>
+          <ClockIcon className="h-5 ml-2" />
+        </div>
+      ) : (
+        ""
+      )}
 
       <div className="px-4">
         {/* Title */}
@@ -56,18 +60,27 @@ function Task({ email, title, body, image, id, date, refresh }) {
         </div>
 
         {/* Body Text */}
-        <p className="transition duration-200"
+        <p
+          className="transition duration-200"
           style={{
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: increaseCardHeight === false ? 'nowrap' : ''
-          }} >{body}</p>
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: increaseCardHeight === false ? "nowrap" : "",
+          }}
+        >
+          {body}
+        </p>
         {/*Add imaeg beneath*/}
-        {image !== undefined ?
+        {image !== undefined ? (
           <div>
             {image.length < 4 ? null : (
               <div>
-                <div className="flex items-center gap-2 text-gray-400" style={{ display: increaseCardHeight === true ? 'none' : 'flex' }}>
+                <div
+                  className="flex items-center gap-2 text-gray-400"
+                  style={{
+                    display: increaseCardHeight === true ? "none" : "flex",
+                  }}
+                >
                   <PhotographIcon className="h-4" />
                   <p>Image</p>
                 </div>
@@ -75,38 +88,50 @@ function Task({ email, title, body, image, id, date, refresh }) {
                   src={image}
                   className="sm:mx-auto md:mx-0 sm:w-full md:w-9/12"
                   alt="Loading..."
-                  style={{ display: increaseCardHeight === false ? 'none' : 'flex' }}
+                  style={{
+                    display: increaseCardHeight === false ? "none" : "flex",
+                  }}
                 />
               </div>
             )}
-          </div> : ''
-        }
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       <div className="text-red-800 mt-2 mx-2 flex justify-between">
         {/*Trash Icon*/}
-        {hideDeleteButton === false ?
+        {hideDeleteButton === false ? (
           <button
             className="px-1 active:text-red-200 duration-150 transition"
             onClick={() => setIsOpen(true)}
-          ><TrashIcon className="h-5" /></button>
-          : null}
+          >
+            <TrashIcon className="h-5" />
+          </button>
+        ) : null}
 
-        {collapseableText === true ?
+        {collapseableText === true ? (
           <div>
-            {increaseCardHeight === false ?
+            {increaseCardHeight === false ? (
               <p className="text-gray-400 mx-4 flex items-center">
                 <ArrowDownIcon className="h-5" />
                 Expand
-            </p> :
+              </p>
+            ) : (
               <p className="text-gray-400 mx-4 flex items-center">
                 <ArrowUpIcon className="h-5" />
                 Collapse
-            </p>}
-          </div> : null}
-
+              </p>
+            )}
+          </div>
+        ) : null}
       </div>
-      <DeleteModal isOpen={isOpen} setIsOpen={setIsOpen} actionAllowed={actionAllowed} />
+      <DeleteModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        actionAllowed={actionAllowed}
+      />
     </div>
   );
 }
